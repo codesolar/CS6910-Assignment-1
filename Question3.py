@@ -166,7 +166,7 @@ class NeuralNetwork:
     y_predicted = self.output(A)
     return y_predicted
 
-  def lossFunction(self,input,TrueOutput,PredictedOutput,loss,batch_size,lamb):
+  def lossFunction(self,input,TrueOutput,PredictedOutput,loss,batch_size):
     lossValue = 0
     # print(PredictedOutput.shape)   (10,54000)
     if loss == 'categorical_crossentropy':
@@ -379,21 +379,25 @@ class NeuralNetwork:
       print("Training Accuracy = {}".format(TrainAccuracyPerEpoch[-1]))
       print("Validation Accuracy = {}".format(ValAccuracyPerEpoch[-1]))
 
-      # wandb.log({"training_acc": train_acc, "validation_accuracy": val_acc, "training_loss": train_cost, "validation cost": val_cost})
+      #wandb.log({"training_acc": train_acc, "validation_accuracy": val_acc, "training_loss": train_cost, "validation cost": val_cost})
       
     return TrainCostPerEpoch,TrainAccuracyPerEpoch,ValCostPerEpoch,ValAccuracyPerEpoch
 
 # adam 0.5
 #nadam 0.01
 
+# NN = NeuralNetwork('xavier',3,128,'relu',x_trainT,y_trainT,x_valT,y_valT)
+
+# TrainCostPerEpoch,TrainAccuracyPerEpoch,ValCostPerEpoch,ValAccuracyPerEpoch = NN.fit(learning_rate = 0.01,epochs = 10,optimizer = 'sgd',loss = 'categorical_crossentropy')
+
 def main():
-   wandb.init(project = 'Assignment 1' , name = 'Question 3')
+   wandb.init(project = 'Assignment 1' , name = 'Question 4')
    config = wandb.config
    NN = NeuralNetwork(mode_of_initialization = config.mode_of_initialization,number_of_hidden_layers = config.number_of_hidden_layers , num_neurons_in_hidden_layers = config.num_neurons_in_hidden_layers,activation = config.activation ,TrainInput = x_trainT,TrainOutput = y_trainT,ValInput = x_valT,ValOutput = y_valT)
    NN.fit(learning_rate = config.learning_rate, beta = 0.9 , beta1 = 0.9 , beta2 = 0.999 , epsilon = 1e-6, optimizer = config.optimizer , batch_size = config.batch_size , loss = config.loss , epochs = config.epochs)
 
 sweep_configuration = {
-    'method': 'random',
+    'method': 'bayes',
     'name': 'ACCURACY VS EPOCH',
     'metric': {
         'goal': 'maximize', 
@@ -423,7 +427,7 @@ sweep_configuration = {
 
 sweep_id = wandb.sweep(sweep = sweep_configuration , project = 'Assignment 1')
 
-wandb.agent(sweep_id , function = main , count = 5)
+wandb.agent(sweep_id , function = main , count = 50)
 
 wandb
 
