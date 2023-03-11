@@ -94,6 +94,406 @@ a = np.array([1,2])
 b = np.array([3,6])
 a*b
 
+y_trainT
+
+e_y = np.transpose(np.eye(10)[y_trainT[0]])
+
+e_y
+
+NN.predict(x_trai)
+
+# class NeuralNetwork:
+#   '''n_layers = total number of layers 
+#     n_neurons =  number of neurons in hidden and output layer and input layer
+#     n_input = number of inputs
+#     n_outputs = number of outputs
+#     activation_function = default is sigmoid activation function
+#     weights = weights of each connecting layer , size = (previous Layer Size , Current Layer Size)
+#     biases = biases of each connecting layer , size = (Current Layer Size , 1)
+#     TrainInput = input layer's input'''
+#   mode_of_initialization = ""
+#   n_layers = 0
+#   activation_function = ""
+#   n_input = 0
+#   n_output = 0
+#   n_neurons = []
+#   TrainInput = []
+#   TrainOutput = []
+#   ValInput = []
+#   ValOutput = []
+#   parameters = {}
+#   cache = {}
+#   grads = {}
+#   def __init__(self,mode_of_initialization,number_of_hidden_layers,num_neurons_in_hidden_layers,activation,TrainInput,TrainOutput,ValInput,ValOutput):
+#     self.mode_of_initialization = mode_of_initialization
+#     neuronsPerLayer = []
+#     for i in range(number_of_hidden_layers):
+#       neuronsPerLayer.append(num_neurons_in_hidden_layers)
+#     self.n_layers = number_of_hidden_layers + 2
+#     self.activation_function = activation
+#     self.TrainInput = TrainInput
+#     self.TrainOutput = TrainOutput
+#     self.n_input = TrainInput.shape[0]
+#     self.n_output = TrainOutput[0,TrainOutput.argmax(axis = 1)[0]] + 1
+#     self.n_neurons = neuronsPerLayer
+#     self.n_neurons.append(self.n_output)
+#     self.n_neurons.insert(0 , self.n_input)
+#     self.cache["H0"] = TrainInput
+#     self.cache["A0"] = TrainInput
+#     self.grads = {}
+#     self.ValInput = ValInput
+#     self.ValOutput = ValOutput
+#     for l in range(1,self.n_layers):
+#       if self.mode_of_initialization == "random_normal":
+#         self.parameters["W" + str(l)] = np.random.randn(self.n_neurons[l] , self.n_neurons[l - 1]) 
+#       elif self.mode_of_initialization == "random_uniform":
+#         self.parameters["W" + str(l)] = np.random.rand(self.n_neurons[l] , self.n_neurons[l - 1]) 
+#       elif self.mode_of_initialization == "xavier":
+#         limit = np.sqrt(2 / float(self.n_neurons[l - 1] + self.n_neurons[l]))
+#         self.parameters["W" + str(l)] = np.random.normal(0.0, limit, size=(self.n_neurons[l],self.n_neurons[l - 1]))
+#       self.parameters["b" + str(l)] = np.zeros((self.n_neurons[l] , 1)) 
+
+
+    
+#   # def linear_forward(self,H,W,b):
+#   #   A = np.dot(W,H) + b
+#   #   cache = (H,W,b)
+#   #   return A,cache
+  
+#   # def active_forward(self,H_prev, W ,b):
+#   #   print("hello" , H_prev.shape)
+#   #   A = np.dot(W , H) + b
+#   #   self.cache["A"]
+#   #   H , active_cache = ActivationFunction.sigmoid(A)
+#   #   cache = (linear_cache , active_cache)
+#   #   return H , cache
+
+#   def output(self,A):
+#     return ActivationFunction.softmax(A)
+
+  
+#   def forward(self,X,activation):
+#     self.cache["H0"] = X
+#     for l in range(1 , self.n_layers):
+#       H = self.cache["H" + str(l - 1)]
+#       # print(H.shape)
+#       W = self.parameters["W" + str(l)]
+#       b = self.parameters["b" + str(l)]
+#       A = np.dot(W , H) + b
+#       # print(W.shape)
+#       # print(b.shape)
+#       self.cache["A" + str(l)] = A
+#       if activation == 'sigmoid':
+#          H = ActivationFunction.sigmoid(A)
+#       elif activation == 'relu':
+#          H = ActivationFunction.Relu(A)
+#       elif activation == 'tanh':
+#          H = ActivationFunction.tanh(A)
+#       self.cache["H" + str(l)] = H
+#     yPredicted = self.output(self.cache["A" + str(self.n_layers - 1)])
+#     return yPredicted
+
+#   def predict(self,input):
+#     H = input
+#     for l in range(1 , self.n_layers - 1):
+#       # print(H.shape)
+#       W = self.parameters["W" + str(l)]
+#       b = self.parameters["b" + str(l)]
+#       A = np.dot(W , H) + b
+#       # print(W.shape)
+#       # print(b.shape)
+#       H = ActivationFunction.sigmoid(A)
+
+#     W = self.parameters["W" + str(self.n_layers - 1)]
+#     b = self.parameters["b" + str(self.n_layers - 1)]
+#     A = np.dot(W , H) + b
+#     y_predicted = self.output(A)
+#     return y_predicted
+
+#   def lossFunction(self,input,TrueOutput,PredictedOutput,loss,batch_size,lamb):
+#     lossValue = 0
+#     # print(PredictedOutput.shape)   (10,54000)
+#     if loss == 'categorical_crossentropy':
+#       OneHotOfTrueOutput = np.transpose(np.eye(self.n_output)[TrueOutput[0]])
+#       sum = -np.sum(OneHotOfTrueOutput * np.log(PredictedOutput + 1e-9))
+#       loss = sum / batch_size
+#       # print(loss)
+
+#     elif loss == 'mse':
+#       PredictedOutput = np.argmax(PredictedOutput,axis = 0)
+#       # print(PredictedOutput.shape)
+#       loss = (1 / 2) *  np.sum((TrueOutput - PredictedOutput) **2) / batch_size
+#       # print(loss)
+#     sum = 0
+#     for l in range(1,self.n_layers):
+#       for i in range(self.parameters["W" + str(l)].shape[0]):
+#         for j in range(self.parameters["W" + str(l)].shape[1]):
+#            sum = sum + self.parameters["W" + str(l)][i,j] ** 2
+    
+
+#     loss = loss + (lamb/(2 * batch_size))*sum
+#     # print(loss)
+#     return loss
+
+    
+#   def accuracy(self,input,TrueOutput,PredictedOutput):
+#     PredictedOutput = np.argmax(PredictedOutput,axis = 0)
+#     count = 0
+#     for i in range(TrueOutput.shape[1]):
+#       if TrueOutput[0,i] == PredictedOutput[i]:
+#         count = count + 1
+#     accu = (count / TrueOutput.shape[1]) * 100
+
+#     print(accu)
+#     return accu
+#   # def backprop(self):
+#   #   e_y = np.transpose(np.eye(self.n_output)[self.TrainOutput[0]])
+#   #   yPredicted,cache = self.predict(self.TrainInput)
+#   #   a = -(e_y - yPredicted)
+#   #   for l in reversed(range(self.n_layers)):
+#   #     H,A,W,b = cache[l]
+
+#   # def linear_backward(dA, cache):
+#   #   linear_cache , activation_cache = cache
+#   #   H_prev , W , b = linear_cache
+#   #   dW = np.dot(dA , H_prev)
+#   #   db = dA
+#   #   dH_prev = np.dot(W.T,dA)
+#   #   dA_prev = np.multiply(dH_prev , ActivationFunction.sigmoid_derivative(activation_cache))
+#   # def backprop(self,):
+
+
+#   def backprop(self, yPredicted , e_y , batchSize, lamb, loss,activation):
+#     if loss == 'categorical_crossentropy':
+#       dA = yPredicted - e_y
+#     elif loss == 'mse':
+#       dA = (yPredicted - e_y) * ActivationFunction.softmax_derivative(self.cache["A" + str(self.n_layers - 1)])
+#     m = dA.shape[1]
+#     self.grads["dA" + str(self.n_layers - 1)] = dA
+#     for k in (range(self.n_layers - 1,0,-1)):
+#       # print(k)
+#       dA = self.grads["dA" + str(k)]
+#       H_prev = self.cache["H" + str(k - 1)]
+#       A_prev = self.cache["A" + str(k - 1)]
+#       W = self.parameters["W" + str(k)]
+#       dW = np.zeros(W.shape)
+#       db = np.zeros((W.shape[0],1))
+#       dH_prev = np.zeros(H_prev.shape)
+#       dA_prev = np.zeros(A_prev.shape)
+
+#       dW = (np.dot(dA, H_prev.T) + lamb * W) / batchSize
+#       db = np.sum(dA , axis = 1,keepdims = True)/batchSize
+#       if k > 1:
+#         dH_prev = np.matmul(W.T , dA)
+#         if activation == 'sigmoid':
+#           dA_prev = dH_prev * ActivationFunction.sigmoid_derivative(A_prev)
+#         elif activation == 'tanh':
+#           dA_prev = dH_prev * ActivationFunction.tanh_derivative(A_prev)
+#         elif activation == 'relu':
+#           dA_prev = dH_prev * ActivationFunction.Relu_derivative(A_prev)
+#       self.grads["dA" + str(k - 1)] = dA_prev
+#       self.grads["dW" + str(k)] = dW
+#       self.grads["db" + str(k)] = db
+
+#       # print(H_prev.shape)
+#       # print(A_prev.shape)
+#       # print(W.shape)
+#       # print(dW.shape)
+#       # print(db.shape)
+#       # print(dH_prev.shape)
+#       # print(sigmoid_backward_A_prev.shape)
+#       # print(dA.shape)
+#       # print(H_prev_transpose[0,:].shape)
+
+#       # print(dW.shape)
+#       # print(db)
+#       # print(dA_temp)
+#       # print(db.shape)
+#       # print(db)
+#       # print("error     " , dA_temp.shape)
+#       # print(np.dot(W.T,dA_temp)[:,0].shape)
+#       # print(dW.shape)
+#       # print(db.shape)
+#       # print(dH_prev.shape)
+#       # print(dA.shape)
+
+#     # print(self.grads)
+#     return
+
+
+
+
+
+
+
+#   def update_parameters_sgd(self,learning_rate):
+#     for l in range(1 ,self.n_layers):
+#       self.parameters["W" + str(l)] = self.parameters["W" + str(l)] - learning_rate * self.grads["dW" + str(l)]
+#       self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - learning_rate * self.grads["db" + str(l)]
+#     return
+  
+
+#   def update_parameters_momentum(self,learning_rate,beta,previous_updates):
+#     for l in range(1 ,self.n_layers):
+#       previous_updates["W" + str(l)] = beta * previous_updates["W" + str(l)] + self.grads["dW" + str(l)]
+#       previous_updates["b" + str(l)] = beta * previous_updates["b" + str(l)] + self.grads["db" + str(l)]
+#       self.parameters["W" + str(l)] = self.parameters["W" + str(l)] - learning_rate * previous_updates["W" + str(l)]
+#       self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - learning_rate * previous_updates["b" + str(l)]
+#     return previous_updates
+
+
+
+#   def update_parameters_RMSprop(self,learning_rate,beta,epsilon,previous_updates):
+#     for l in range(1 ,self.n_layers):
+#       previous_updates["W" + str(l)] = beta * previous_updates["W" + str(l)] + (1 - beta) * np.square(self.grads["dW" + str(l)])
+#       previous_updates["b" + str(l)] = beta * previous_updates["b" + str(l)] + (1 - beta) * np.square(self.grads["db" + str(l)])
+#       factorW = learning_rate / (np.sqrt(previous_updates["W" + str(l)] + epsilon))
+#       factorb = learning_rate / (np.sqrt(previous_updates["b" + str(l)] + epsilon))
+#       self.parameters["W" + str(l)] = self.parameters["W" + str(l)] - factorW * self.grads["dW" + str(l)]
+#       self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - factorb * self.grads["db" + str(l)]
+#     return previous_updates
+
+#   def update_parameters_adam(self,learning_rate,beta1,beta2,epsilon,V , S , t):
+#     for l in range(1 ,self.n_layers):
+#       V["dW" + str(l)] = beta1 *V["dW" + str(l)] + (1 - beta1) * self.grads["dW" + str(l)]
+#       V["db" + str(l)] = beta1 *V["db" + str(l)] + (1 - beta1) * self.grads["db" + str(l)]
+#       S["dW" + str(l)] = beta2 *S["dW" + str(l)] + (1 - beta2) * np.square(self.grads["dW" + str(l)])
+#       S["db" + str(l)] = beta2 *S["db" + str(l)] + (1 - beta2) * np.square(self.grads["db" + str(l)])
+#       VdW_corrected = V["dW" + str(l)] / (1 - (beta1 ** t))
+#       Vdb_corrected = V["db" + str(l)] / (1 - (beta1 ** t))
+#       SdW_corrected = S["dW" + str(l)] / (1 - (beta2 ** t))
+#       Sdb_corrected = S["db" + str(l)] / (1 - (beta2 ** t))
+#       factorW = learning_rate / (np.sqrt(SdW_corrected) + epsilon)
+#       factorb = learning_rate / (np.sqrt(Sdb_corrected) + epsilon)
+#       self.parameters["W" + str(l)] = self.parameters["W" + str(l)] - factorW * VdW_corrected
+#       self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - factorb * Vdb_corrected
+#     return V,S,t + 1
+
+
+#   def update_parameters_nadam(self,learning_rate,beta1,beta2,epsilon,V , S , t):
+#     for l in range(1 , self.n_layers):
+#       V["dW" + str(l)] = beta1 *V["dW" + str(l)] + (1 - beta1) * self.grads["dW" + str(l)]
+#       V["db" + str(l)] = beta1 *V["db" + str(l)] + (1 - beta1) * self.grads["db" + str(l)]
+#       S["dW" + str(l)] = beta2 *S["dW" + str(l)] + (1 - beta2) * np.square(self.grads["dW" + str(l)])
+#       S["db" + str(l)] = beta2 *S["db" + str(l)] + (1 - beta2) * np.square(self.grads["db" + str(l)])        
+#       VW_corrected = V["dW" + str(l)] / (1 - (beta1 ** (t)))
+#       Vb_corrected = V["db" + str(l)] / (1 - (beta1 ** (t)))
+#       SW_corrected = S["dW" + str(l)] / (1 - (beta2 ** (t)))
+#       Sb_corrected = S["db" + str(l)] / (1 - (beta2 ** (t)))
+#       factorW = (learning_rate / (np.sqrt(SW_corrected) + epsilon)) * (beta1*VW_corrected+(1-beta1)*self.grads["dW" + str(l)]/(1-beta1**(t)))
+#       factorb = (learning_rate / (np.sqrt(Sb_corrected) + epsilon)) * (beta1*Vb_corrected+(1-beta1)*self.grads["db" + str(l)]/(1-beta1**(t)))
+#       self.parameters["W" + str(l)] = self.parameters["W" + str(l)] - factorW 
+#       self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - factorb 
+#     return V,S,t + 1
+#   # def gradient_descent(self,learning_rate,max_iter):
+#   #   lossList = []
+#   #   maxIteration = max_iter
+#   #   for iter in range(maxIteration):
+#   #     yPredicted = self.forward()
+#   #     e_y = np.transpose(np.eye(self.n_output)[self.TrainOutput[0]])
+#   #     dA = self.output(self.cache["A" + str(self.n_layers - 1)]) - e_y
+#   #     self.backprop(dA)
+#   #     lossList.append(self.lossFunction(self.TrainInput,self.TrainOutput,yPredicted))
+#   #     self.update_parameters_sgd(learning_rate)
+#   #   return lossList
+
+
+
+#   def fit(self,learning_rate = 0.001,beta = 0.9,beta1 = 0.9,beta2 = 0.999 ,epsilon = 1e-6, optimizer = 'sgd',batch_size = 100,loss = 'categorical_crossentropy',epochs = 20,lamb = 0):
+    
+#     TrainCostPerEpoch = []
+#     TrainCostPerBatch = []
+#     TrainAccuracyPerEpoch = []
+#     ValCostPerEpoch = []
+#     ValAccuracyPerEpoch = []
+#     previous_updates = {}
+#     V = {}
+#     S = {}
+#     for l in range(1 , self.n_layers):
+#       previous_updates["W" + str(l)] = np.zeros((self.n_neurons[l] , self.n_neurons[l - 1]))
+#       previous_updates["b" + str(l)] = np.zeros((self.n_neurons[l] , 1))
+#     for l in range(1 , self.n_layers):
+#       V["dW" + str(l)] = np.zeros((self.n_neurons[l] , self.n_neurons[l - 1]))
+#       V["db" + str(l)] = np.zeros((self.n_neurons[l] , 1))
+#       S["dW" + str(l)] = np.zeros((self.n_neurons[l] , self.n_neurons[l - 1]))
+#       S["db" + str(l)] = np.zeros((self.n_neurons[l] , 1))
+#     t = 1
+
+
+#     for count in range(epochs):
+#       for i in range(0 , self.TrainInput.shape[1],batch_size):
+#         if i + batch_size > self.TrainInput.shape[1]:
+#           continue
+
+#         # if optimizer == 'nadam':
+#           # yPredicted = self.forward(self.TrainInput[:,i:i + batch_size])
+#           # e_y = np.transpose(np.eye(self.n_output)[self.TrainOutput[0,i : i + batch_size]])
+#           # self.backprop(yPredicted,e_y,batch_size,lamb,loss)
+#           # for l in range(1 , self.n_layers):
+#           #   V["dW" + str(l)] = beta1 *V["dW" + str(l)] + (1 - beta1) * self.grads["dW" + str(l)]
+#           #   V["db" + str(l)] = beta1 *V["db" + str(l)] + (1 - beta1) * self.grads["db" + str(l)]
+#           #   S["dW" + str(l)] = beta2 *S["dW" + str(l)] + (1 - beta2) * np.square(self.grads["dW" + str(l)])
+#           #   S["db" + str(l)] = beta2 *S["db" + str(l)] + (1 - beta2) * np.square(self.grads["db" + str(l)])        
+#           #   VW_corrected = V["dW" + str(l)] / (1 - (beta1 ** (i + 1)))
+#           #   Vb_corrected = V["db" + str(l)] / (1 - (beta1 ** (i + 1)))
+#           #   SW_corrected = S["dW" + str(l)] / (1 - (beta2 ** (i + 1)))
+#           #   Sb_corrected = S["db" + str(l)] / (1 - (beta2 ** (i + 1)))
+#           #   factorW = (learning_rate / (np.sqrt(SW_corrected) + epsilon)) * (beta1*VW_corrected+(1-beta1)*self.grads["dW" + str(l)]/(1-beta1**(i+1)))
+#           #   factorb = (learning_rate / (np.sqrt(Sb_corrected) + epsilon)) * (beta1*Vb_corrected+(1-beta1)*self.grads["db" + str(l)]/(1-beta1**(i+1)))
+#           #   self.parameters["W" + str(l)] = self.parameters["W" + str(l)] - factorW * VW_corrected
+#           #   self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - factorb * Vb_corrected
+
+    
+#         if optimizer == 'nesterov_accelerated_gradient':
+#           for l in range(1 ,self.n_layers):
+#             self.parameters["W" + str(l)] = self.parameters["W" + str(l)] - beta * previous_updates["W" + str(l)]
+#             self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - beta * previous_updates["b" + str(l)]
+#             yPredicted = self.forward(self.TrainInput[:,i:i + batch_size],self.activation_function)
+#             e_y = np.transpose(np.eye(self.n_output)[self.TrainOutput[0,i : i + batch_size]])
+#             self.backprop(yPredicted,e_y,batch_size,lamb,loss,self.activation_function)
+#             previous_updates["W" + str(l)] = beta * previous_updates["W" + str(l)] + self.grads["dW" + str(l)]
+#             previous_updates["b" + str(l)] = beta * previous_updates["b" + str(l)] + self.grads["db" + str(l)]
+#             self.parameters["W" + str(l)] = self.parameters["W" + str(l)] - learning_rate * self.grads["dW" + str(l)]
+#             self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - learning_rate * self.grads["db" + str(l)]
+          
+#         else:
+#           yPredicted = self.forward(self.TrainInput[:,i:i + batch_size],self.activation_function)
+#           e_y = np.transpose(np.eye(self.n_output)[self.TrainOutput[0,i : i + batch_size]])
+#           self.backprop(yPredicted,e_y,batch_size,lamb,loss,self.activation_function)
+#           if optimizer == 'sgd':
+#             self.update_parameters_sgd(learning_rate)
+#           elif optimizer == 'momentum':
+#             previous_updates = self.update_parameters_momentum(learning_rate,beta,previous_updates)
+#           elif optimizer == 'RMSprop':
+#             previous_updates = self.update_parameters_RMSprop(learning_rate,beta,epsilon,previous_updates)
+#           elif optimizer == 'adam':
+#             epsilon = 1e-8
+#             V , S , t= self.update_parameters_adam(learning_rate,beta1,beta2,epsilon,V , S , t)
+#           elif optimizer == 'nadam':
+#             epsilon = 1e-8
+#             V , S , t= self.update_parameters_nadam(learning_rate,beta1,beta2,epsilon,V , S , t)
+#       yPredicted = self.forward(self.TrainInput,self.activation_function)
+#       train_cost = self.lossFunction(self.TrainInput,self.TrainOutput,yPredicted,loss,self.TrainInput.shape[1],lamb)
+#       TrainCostPerEpoch.append(train_cost)
+
+#       valYPredicted = self.forward(self.ValInput,self.activation_function)
+#       val_cost = self.lossFunction(self.ValInput,self.ValOutput,valYPredicted,loss,self.ValInput.shape[1],lamb)
+#       ValCostPerEpoch.append(val_cost)
+
+#       train_acc = self.accuracy(self.TrainInput, self.TrainOutput,yPredicted)
+#       TrainAccuracyPerEpoch.append(train_acc)
+
+#       val_acc = self.accuracy(self.ValInput, self.ValOutput,valYPredicted)
+#       ValAccuracyPerEpoch.append(val_acc)
+#       # print("********************************")
+#       # print("Epoch Number = {}".format(count))
+#       # print("Training Accuracy = {}".format(TrainAccuracyPerEpoch[-1]))
+#       # print("Validation Accuracy = {}".format(ValAccuracyPerEpoch[-1]))
+
+#       # wandb.log({"training_acc": train_acc, "validation_accuracy": val_acc, "training_loss": train_cost, "validation cost": val_cost})
+      
+#     return TrainCostPerEpoch,TrainAccuracyPerEpoch,ValCostPerEpoch,ValAccuracyPerEpoch
+
 class NeuralNetwork:
   '''n_layers = total number of layers 
     n_neurons =  number of neurons in hidden and output layer and input layer
@@ -164,7 +564,7 @@ class NeuralNetwork:
     return ActivationFunction.softmax(A)
 
   
-  def forward(self,X,activation):
+  def forward(self,X,activation,parameters):
     self.cache["H0"] = X
     for l in range(1 , self.n_layers):
       H = self.cache["H" + str(l - 1)]
@@ -185,7 +585,7 @@ class NeuralNetwork:
     yPredicted = self.output(self.cache["A" + str(self.n_layers - 1)])
     return yPredicted
 
-  def predict(self,input):
+  def predict(self,input,parameters):
     H = input
     for l in range(1 , self.n_layers - 1):
       # print(H.shape)
@@ -204,21 +604,18 @@ class NeuralNetwork:
 
   def lossFunction(self,input,TrueOutput,PredictedOutput,loss,batch_size,lamb):
     lossValue = 0
+    # print(PredictedOutput.shape)   (10,54000)
     if loss == 'categorical_crossentropy':
-    # print(TrueOutput.shape)
-    # print(PredictedOutput.shape)
-      # print(TrueOutput.shape)
-      for i in range(input.shape[1]):
-        a = -np.log(PredictedOutput[TrueOutput[0][i],i]+1e-9)
-        lossValue = lossValue + a
-      lossValue = lossValue / batch_size
-      # print(lossValue)
+      OneHotOfTrueOutput = np.transpose(np.eye(self.n_output)[TrueOutput[0]])
+      sum = -np.sum(OneHotOfTrueOutput * np.log(PredictedOutput + 1e-9))
+      loss = sum / batch_size
+      # print(loss)
 
     elif loss == 'mse':
-      PredictedOutput = self.predict(input)
       PredictedOutput = np.argmax(PredictedOutput,axis = 0)
-      lossValue = (1 / 2) *  np.sum((TrueOutput - PredictedOutput) **2) / batch_size
-    
+      # print(PredictedOutput.shape)
+      loss = (1 / 2) *  np.sum((TrueOutput - PredictedOutput) **2) / batch_size
+      # print(loss)
     sum = 0
     for l in range(1,self.n_layers):
       for i in range(self.parameters["W" + str(l)].shape[0]):
@@ -226,11 +623,10 @@ class NeuralNetwork:
            sum = sum + self.parameters["W" + str(l)][i,j] ** 2
     
 
-    lossValue = lossValue + (lamb/(2 * batch_size))*sum
-    
-    return lossValue
-  def accuracy(self,input,TrueOutput):
-    PredictedOutput = self.predict(input)
+    loss = loss + (lamb/(2 * batch_size))*sum
+    # print(loss)
+    return loss
+  def accuracy(self,input,TrueOutput,PredictedOutput):
     PredictedOutput = np.argmax(PredictedOutput,axis = 0)
     count = 0
     for i in range(TrueOutput.shape[1]):
@@ -255,7 +651,7 @@ class NeuralNetwork:
   # def backprop(self,):
 
 
-  def backprop(self, yPredicted , e_y , batchSize, lamb, loss,activation):
+  def backprop(self, yPredicted , e_y , batchSize, lamb, loss,activation,parameters):
     if loss == 'categorical_crossentropy':
       dA = yPredicted - e_y
     elif loss == 'mse':
@@ -361,6 +757,21 @@ class NeuralNetwork:
       self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - factorb * Vdb_corrected
     return V,S,t + 1
 
+  def update_parameters_NAG(self,input,output,learning_rate,beta,previous_updates,batch_size,loss,lamb):
+    parameters = self.parameters
+    for l in range(1 ,self.n_layers):
+      parameters["W" + str(l)] = self.parameters["W" + str(l)] - beta * previous_updates["W" + str(l)]
+      parameters["b" + str(l)] = self.parameters["b" + str(l)] - beta * previous_updates["b" + str(l)]
+    yPredicted = self.forward(input,self.activation_function,parameters)
+    e_y = np.transpose(np.eye(self.n_output)[output])
+    self.backprop(yPredicted,e_y,batch_size,lamb,loss,self.activation_function,parameters)
+    for l in range(1 ,self.n_layers):
+      previous_updates["W" + str(l)] = beta * previous_updates["W" + str(l)] + self.grads["dW" + str(l)]
+      previous_updates["b" + str(l)] = beta * previous_updates["b" + str(l)] + self.grads["db" + str(l)]
+      self.parameters["W" + str(l)] = self.parameters["W" + str(l)] - learning_rate * self.grads["dW" + str(l)]
+      self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - learning_rate * self.grads["db" + str(l)]
+    
+    return previous_updates
 
   def update_parameters_nadam(self,learning_rate,beta1,beta2,epsilon,V , S , t):
     for l in range(1 , self.n_layers):
@@ -437,21 +848,13 @@ class NeuralNetwork:
 
     
         if optimizer == 'nesterov_accelerated_gradient':
-          for l in range(1 ,self.n_layers):
-            self.parameters["W" + str(l)] = self.parameters["W" + str(l)] - beta * previous_updates["W" + str(l)]
-            self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - beta * previous_updates["b" + str(l)]
-            yPredicted = self.forward(self.TrainInput[:,i:i + batch_size],self.activation_function)
-            e_y = np.transpose(np.eye(self.n_output)[self.TrainOutput[0,i : i + batch_size]])
-            self.backprop(yPredicted,e_y,batch_size,lamb,loss,self.activation_function)
-            previous_updates["W" + str(l)] = beta * previous_updates["W" + str(l)] + self.grads["dW" + str(l)]
-            previous_updates["b" + str(l)] = beta * previous_updates["b" + str(l)] + self.grads["db" + str(l)]
-            self.parameters["W" + str(l)] = self.parameters["W" + str(l)] - learning_rate * self.grads["dW" + str(l)]
-            self.parameters["b" + str(l)] = self.parameters["b" + str(l)] - learning_rate * self.grads["db" + str(l)]
+          previous_updates = self.update_parameters_NAG(self.TrainInput[:,i:i + batch_size],self.TrainOutput[0,i : i + batch_size],learning_rate,beta,previous_updates,batch_size,loss,lamb)
           
         else:
-          yPredicted = self.forward(self.TrainInput[:,i:i + batch_size],self.activation_function)
+          parameters = self.parameters
+          yPredicted = self.forward(self.TrainInput[:,i:i + batch_size],self.activation_function,parameters)
           e_y = np.transpose(np.eye(self.n_output)[self.TrainOutput[0,i : i + batch_size]])
-          self.backprop(yPredicted,e_y,batch_size,lamb,loss,self.activation_function)
+          self.backprop(yPredicted,e_y,batch_size,lamb,loss,self.activation_function,parameters)
           if optimizer == 'sgd':
             self.update_parameters_sgd(learning_rate)
           elif optimizer == 'momentum':
@@ -464,31 +867,36 @@ class NeuralNetwork:
           elif optimizer == 'nadam':
             epsilon = 1e-8
             V , S , t= self.update_parameters_nadam(learning_rate,beta1,beta2,epsilon,V , S , t)
-      yPredicted = self.forward(self.TrainInput,self.activation_function)
+      
+      yPredicted = self.forward(self.TrainInput,self.activation_function,self.parameters)
       train_cost = self.lossFunction(self.TrainInput,self.TrainOutput,yPredicted,loss,self.TrainInput.shape[1],lamb)
       TrainCostPerEpoch.append(train_cost)
 
-      valYPredicted = self.forward(self.ValInput,self.activation_function)
+      valYPredicted = self.forward(self.ValInput,self.activation_function,self.parameters)
       val_cost = self.lossFunction(self.ValInput,self.ValOutput,valYPredicted,loss,self.ValInput.shape[1],lamb)
       ValCostPerEpoch.append(val_cost)
 
-      train_acc = self.accuracy(self.TrainInput, self.TrainOutput)
+      train_acc = self.accuracy(self.TrainInput, self.TrainOutput,yPredicted)
       TrainAccuracyPerEpoch.append(train_acc)
 
-      val_acc = self.accuracy(self.ValInput, self.ValOutput)
+      val_acc = self.accuracy(self.ValInput, self.ValOutput,valYPredicted)
       ValAccuracyPerEpoch.append(val_acc)
-      # print("********************************")
-      # print("Epoch Number = {}".format(count))
-      # print("Training Accuracy = {}".format(TrainAccuracyPerEpoch[-1]))
-      # print("Validation Accuracy = {}".format(ValAccuracyPerEpoch[-1]))
+      print("********************************")
+      print("Epoch Number = {}".format(count))
+      print("Training Accuracy = {}".format(TrainAccuracyPerEpoch[-1]))
+      print("Validation Accuracy = {}".format(ValAccuracyPerEpoch[-1]))
 
-      wandb.log({"training_acc": train_acc, "validation_accuracy": val_acc, "training_loss": train_cost, "validation cost": val_cost})
+      # wandb.log({"training_acc": train_acc, "validation_accuracy": val_acc, "training_loss": train_cost, "validation cost": val_cost})
       
     return TrainCostPerEpoch,TrainAccuracyPerEpoch,ValCostPerEpoch,ValAccuracyPerEpoch
 
 NN = NeuralNetwork('random_normal',2,128,'sigmoid',x_trainT,y_trainT,x_valT,y_valT)
 
-TrainCostPerEpoch,TrainAccuracyPerEpoch,ValCostPerEpoch,ValAccuracyPerEpoch = NN.fit(learning_rate = 0.1,epochs = 10,optimizer = 'nesterov_accelerated_gradient',loss = 'categorical_crossentropy')
+
+
+np.sum(NN.predict(x_trainT) * e_y) / 54000
+
+TrainCostPerEpoch,TrainAccuracyPerEpoch,ValCostPerEpoch,ValAccuracyPerEpoch = NN.fit(learning_rate = 0.0001,epochs = 10,optimizer = 'nesterov_accelerated_gradient',loss = 'mse')
 
 def main():
    wandb.init(project = 'Assignment 1' , name = 'Question 3')
