@@ -758,7 +758,10 @@ class NeuralNetwork:
     return V,S,t + 1
 
   def update_parameters_NAG(self,input,output,learning_rate,beta,previous_updates,batch_size,loss,lamb):
-    parameters = self.parameters
+    parameters = {}
+    for l in range(1 , self.n_layers):
+      parameters["W" + str(l)] = np.zeros((self.n_neurons[l] , self.n_neurons[l - 1]))
+      parameters["b" + str(l)] = np.zeros((self.n_neurons[l] , 1))
     for l in range(1 ,self.n_layers):
       parameters["W" + str(l)] = self.parameters["W" + str(l)] - beta * previous_updates["W" + str(l)]
       parameters["b" + str(l)] = self.parameters["b" + str(l)] - beta * previous_updates["b" + str(l)]
@@ -849,7 +852,7 @@ class NeuralNetwork:
     
         if optimizer == 'nesterov_accelerated_gradient':
           previous_updates = self.update_parameters_NAG(self.TrainInput[:,i:i + batch_size],self.TrainOutput[0,i : i + batch_size],learning_rate,beta,previous_updates,batch_size,loss,lamb)
-          
+          # print(previous_updates)
         else:
           parameters = self.parameters
           yPredicted = self.forward(self.TrainInput[:,i:i + batch_size],self.activation_function,parameters)
@@ -890,13 +893,13 @@ class NeuralNetwork:
       
     return TrainCostPerEpoch,TrainAccuracyPerEpoch,ValCostPerEpoch,ValAccuracyPerEpoch
 
-NN = NeuralNetwork('random_normal',2,128,'sigmoid',x_trainT,y_trainT,x_valT,y_valT)
+NN = NeuralNetwork('random_normal',3,128,'sigmoid',x_trainT,y_trainT,x_valT,y_valT)
 
 
 
 np.sum(NN.predict(x_trainT) * e_y) / 54000
 
-TrainCostPerEpoch,TrainAccuracyPerEpoch,ValCostPerEpoch,ValAccuracyPerEpoch = NN.fit(learning_rate = 0.0001,epochs = 10,optimizer = 'nesterov_accelerated_gradient',loss = 'mse')
+TrainCostPerEpoch,TrainAccuracyPerEpoch,ValCostPerEpoch,ValAccuracyPerEpoch = NN.fit(learning_rate = 0.5,epochs = 10,optimizer = 'nesterov_accelerated_gradient',loss = 'mse')
 
 def main():
    wandb.init(project = 'Assignment 1' , name = 'Question 3')
